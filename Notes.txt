@@ -1,0 +1,619 @@
+
+Data:-  > Data is a raw-fact which descripes the entity(Entity means object).
+
+Information:- > Information is proccessed data.
+
+Database : > Database is the place where we stote the data.
+
+DBMS : > Is a tool or software which manages Database.
+
+RDBMS : > Is a tool which manages the data in the form of table .
+
+SQL :- > SQL is language used to intract with database.
+
+NoSQL :- > NoSQL stands for Not only SQL. which includes additional options other than SQL.
+
+Schema :- > Schema is nothing but structure.
+
+MongoDB :- 
+            > MongoDB is a NoSQL Database which store the data in the form of Json Documents.(Json Documents means Json Objects).
+            > MongoDB is Optional Schema.But SQL is with Schema.
+            [** MongoDB runs on code number 27017]
+
+Collections :- 
+             > Collections is nothing but an array which stores the data in the form of Json Documents.
+             > Collection is group of Json Documents.
+             > Documents  is a group of key and value , where Key must be a double quoted stirng.
+             > Documents is similar to a row in a table.
+             > Key is similar to coloumn in a table.
+
+How MongoDB came ?
+    -> The name MongoDB is derived from the English word “humongous”, 
+       which roughly means “gigantic”. MongoDB was released in 2009 by founder and developer Eliot Horowitz.
+
+CRUD in MongoDB : -
+            >>Create:
+                   1. insertOne(data)
+                   2. insertMany(data)
+                   3. insert(data)
+            >>Read :
+                   1. find(filter    ,     options)        
+                              |                |
+                          Selection        Projection
+
+                   2. findOne(filter , options) 
+
+            >>Update :
+                      1. update(filter,data,options)
+                      2. updateOne(filter,data,options)
+                      3. updateMany(filter,data,options)  
+                      4. replaceOne(filter,data,options)
+
+            >>Delete :
+                      1. delete(filter,options)
+                      2. deleteMany(filter)
+                      3. remove(filter,options)                       
+
+MongoDB Compass :> 
+            1.Is a GUI tool for MongoDB. Which allows us to perform CRUD operations without writing the quaries.
+            2.Default databases of MongoDB -> 1. admin 2. config 3. local .
+            3.Command To display avalible databases -> show dbs.
+            4. Command to create and switch/connect to database -> use (databaseName)
+            [
+            ** If you want to connect to a database we should type "use follwed by database name"
+            ** Use command connects to database if it is avalible and stores the reference inside "db" variable.
+            ** If the database is not avalible it creates a new database and connects to the new database and stores the reference inside "db" variable.
+            ** If the database is empty "show dbs" command will not displays the databases.
+            ]  
+
+Method to create Collection :>      
+                               db.createCollection('CollectionName')
+                               [O/P -> {ok: 1}] 
+
+Command to display the collection :> 
+                                    show collections
+Adding Documents to Collection :> 
+                               1. db.stud.insertOne({"name":"Soumyadeep"})
+
+                                O/P > {
+                                     acknowledged: true,
+                                     insertedId: ObjectId("64c8c02081e3530c1ee73b0d")
+                                        }
+
+                                2.  db.stud.insertMany([{"name":"STRAK"},{"name":"DEEP"}])
+                                    {
+                                    acknowledged: true,
+                                    insertedIds: {
+                                        '0': ObjectId("64c8c0e281e3530c1ee73b0e"),
+                                        '1': ObjectId("64c8c0e281e3530c1ee73b0f")
+                                    }
+                                    }
+
+[** If we add only one document in 'insertMany' it will throw an error .
+ db.stud.insertMany({"name":"SANJU"})
+MongoInvalidArgumentError: Argument "docs" must be an array of documents ]         
+
+[
+    **  db.stud.insert({name:'Sheela'})
+DeprecationWarning: Collection.insert() is deprecated. Use insertOne, insertMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId("64c8c38e81e3530c1ee73b10") }
+}
+]
+
+** _id : 
+         > Is the a unique identifier which is added by MongoDB .
+         > Every MongoDB documents will be having a unique identifier called _id.
+         > If you want to override the _id we can overrated at the time of inserting the documents.
+    
+        [
+             db.stud.insertOne({name : "Kitty" ,_id : '23'})
+             { acknowledged: true, insertedId: '23' }
+        ]
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+COMPARISON AND RELATIONAL OPERATORS :-
+
+  Name                                                        Description
+
+1. $eq                                             Matches values that are equal to a specified value.
+2. $gt                                             Matches values that are greater than a specified value.
+3. $gte                                            Matches values that are greater than or equal to a specified value.
+4. $in                                             Matches any of the values specified in an array.
+5. $lt                                             Matches values that are less than a specified value.
+6. $lte                                            Matches values that are less than or equal to a specified value.
+7. $ne                                             Matches all values that are not equal to a specified value.
+8. $nin                                            Matches none of the values specified in an array.
+
+** Selction is Selecting rows AND Projection is Selecting columns .
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Q> Write a MongoDB query to get all the employee details.
+
+    db.emp.find()
+
+Q> Write a MongoDB query to get the first employee details .
+
+    db.emp.findOne() || db.emp.find({JOB:{$eq:'SALESMAN'}})
+
+Q> Write a MongoDB query to get all the employee details whose job is Salesman .
+
+    db.emp.find({JOB:'SALESMAN'}) || db.emp.find({JOB:{$eq:'CLERK'},COMM:{$eq:null}})
+
+Q> Write a MongoDB query to get all the employee details whose job is Cleark and Commission is null .
+
+    db.emp.find({JOB:'CLERK',COMM:null})
+
+Q> Write a MongoDB query to display all the employee details whose depertment is 10 .    
+
+    db.emp.find({DEPTNO:{$eq:10}})
+
+Q> Write a MongoDB query to get all the employee details who is getting salary greater than 1200.
+
+    db.emp.find({SAL:{$gt:1200}})
+
+Q> Write a MongoDB query to get all the employee details who is getting salary less than 600 .
+
+    db.emp.find({SAL:{$lt:600}})
+
+Q> Write a MongoDB query to get all the employee details who is getting salary 1600 and grater than 1600.
+
+    db.emp.find({SAL:{$gte:1600}})
+
+Q> Write a MongoDB query to get all the employee details whose salary is gretaer than 1000 and working as a clerk.
+
+    db.emp.find({SAL:{$gt:1000},JOB:{$eq:"CLERK"}})
+
+Q> write a MongoDB query to display whose depertment is 20 and working as a salesman.
+
+    db.emp.find({DEPTNO:{$eq:20},JOB:{$eq:"SALESMAN"}})
+
+Q> Write a MongoDB query to display all the employee details whose job is analyst and getting salary is greater than 2000.
+
+    db.emp.find({JOB:{$eq:"ANALYST"},SAL:{$gt:2000}})
+
+Q> Write a MongoDB query to get all the employee details who is working as a salesman and clerk.
+
+    db.emp.find({JOB:{$in:["SALESMAN","CLERK"]}})
+
+Q> Write a MongoDB query to get all the employee details who is not getting salary 5000.
+
+    db.emp.find({SAL:{$ne:5000}})
+
+Q> Write a MongoDB query to get all the employee names .
+
+    db.emp.find({},{ENAME:1,_id:0})
+
+Q> Write a MongoDB query to get all the employee details whose name is jones and working in a depertment 20.
+
+    db.emp.find({DEPTNO:{$eq:20},ENAME:{$eq:"JONES"}})
+
+Q> Write a MongoDB query to get all the employee details whose job is manager and getting salry more than 2000 amd working in document number 20 .
+
+    db.emp.find({JOB:{$eq:"MANAGER"},SAL:{$gt:2000},DEPTNO:{$eq:20}})
+
+Q> Write a MongoDB query to get all the employee details who is not working as a clerk as well as an analyst.
+
+    db.emp.find({JOB:{$nin:["ANALYST","CLERK"]}})
+
+Q> Write a MongoDB query to get all the employee names and depertment who is working as MANAGER.
+
+    db.emp.find({JOB:{$eq:"MANAGER"}},{ENAME:1,_id:0,DEPTNO:1})
+
+Q> Write a MongoDB query to get all the employees names and jobs whose depertment no is 30 and 20.
+
+    db.emp.find({DEPTNO:{$in:[20,30]}},{ENAME:1,_id:0,JOB:1})
+
+Q> Write a MongoDB query to get all the employees names , depertment no , jobs of all the employees whose job is MANAGER and getting salary more than 3000 and commission is null .
+
+    db.emp.find({JOB:{$eq:"MANAGER"}},{ENAME:1,_id:0,DEPTNO:1,JOB:1},{SAL:{$gt:3000},COMM:{$eq:null}})
+
+Q> Write a MongoDB query to get all the employees details who is not getting salry greater than 1200 and working in depertment 10.
+
+    db.emp.find({SAL:{$gt:1200},DEPTNO:10})
+
+Q> Write a MongoDB query to display the employees names and salaries who is not getting salary less than 2000. 
+
+    db.emp.find({SAL:{$gte:2000}},{ENAME:1,SAL:1,_id:0}) 
+
+Q> Write a MongoDB query to display the all the employees names and jobs who is working under depertment 30 and getting salary greater than 4000.
+
+     db.emp.find({DEPTNO:30,SAL:{$gt:4000}},{ENAME:1,JOB:1,_id:0})
+
+Q> Write a MongoDB query to display the all the employee details who is having some commission and working as an ANALYST .
+
+    db.emp.find({COMM:{$ne:null},JOB:{$eq:"ANALYST"}})
+
+Q> Write a MongoDB query to display the all the employee Names , manager number , depertment who is working under manager number 7839 .
+
+    db.emp.find({MGR:{$eq:7839}},{ENAME:1,MGR:1,DEPTNO:1,_id:0})
+
+Q> Write a MongoDB query to display the all the employee departments who is not getting salary more than 2000 and working as manager.
+
+    db.emp.find({SAL:{$lte:2000},JOB:{$eq:"MANAGER"}},{ENAME:1,DEPTNO:1,_id:0})
+
+Q> Write a MongoDB query to display the all the employee names with their manager numbers and who is working under depertment nu 20 and whose salary is less than 2000 .
+
+    db.emp.find({DEPTNO:{$eq:20},SAL:{$lt:2000}},{ENAME:1,MGR:1,_id:0}) 
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ELEMENT OPERATORS :
+
+1. $exists -> Exists operator is used to check wheather the document is avalible in the given key.
+                Accepts boolean value. If the value i strue it returns the document with the given key .
+                                       If the value is false it returns the documents which is not having the given key.
+
+2. $type -> Type operator is used to get the based on data types of the keys.
+            *** Find() method returns empty coursur object if there is no documents avalible with the filtered conditons.
+
+
+Q> Write a MongoDB query to to display employee names and manager number who is having manager number .
+
+    db.emp.find({MGR:{$exists:true}},{ENAME:1,MGR:1,_id:0})
+
+Q> Write a MongoDB query to display employee names and manager number who is not having manager .
+
+    db.emp.find({MGR:{$exists:true,$eq:null}},{ENAME:1,MGR:1,_id:0})    
+
+Q> Write a MongoDB query to display all the employee details who is having address and woking in depertment no 10 .
+
+    db.emp.find({ADDRESS:{$exists:true},DEPTNO:{$eq:10}})
+
+Q> Write a MongoDB query to display all the employee names and cities who is not working in depertment no 20 or 30 .
+
+    db.emp.find({DEPTNO:{$nin:[20, 30]}},{ _id: 0, ENAME: 1, "ADDRESS.CITY": 1 })
+
+Q> Write a MongoDB query to display all the employee names , states , manager number who is having mobile(key) number and working under manager 7839 .
+
+    db.emp.find({MOBILE:{$exists:true},MGR:{$eq:7839}},{ENAME:1,MGR:1,"ADDRESS.STATE":1,_id:0})
+
+Q> Write a MongoDB query to display all the employee departments who is not getting salary more than 2000 and having address .
+
+    db.emp.find({ADDRESS:{$exists:true},SAL:{$lt:2000}},{DEPTNO:1,_id:0})
+
+Q> Write a MongoDB query to display all the employee names and countries who is staying in bangalore .
+
+    db.emp.find({"ADDRESS.CITY":{$exists:true},"ADDRESS.CITY":{$eq:"BANGALORE"}},{ENAME:1,"ADDRESS.COUNTRY":1,_id:0})
+
+Q> Write a MongoDB query to display all the employee names, department number along with their department names who is having mumbai as loaction.
+
+    db.emp.find({"ADDRESS.CITY":{$exists:true},"ADDRESS.CITY":{$eq:"MUMBAI"}},{ENAME:1,DEPTNO:1,"ADDRESS.DNAME":1,_id:0})
+
+Q> Write a MongoDB query to display all the employee details whose manager number type is Number.
+
+    db.emp.find({MGR:{$type:"number"}})
+
+Q> Write a MongoDB query to display all the employee details whose manager number is of type String.
+
+    db.emp.find({MGR:{$type:"string"}})
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+*** Command to delete the Database ---> db.dropDatabase()
+*** To check the status of the database ---> db.stats()
+                                            {
+                                            db: 'Employees',
+                                            collections: 1,
+                                            views: 0,
+                                            objects: 14,
+                                            avgObjSize: 230.5,
+                                            dataSize: 3227,
+                                            storageSize: 36864,
+                                            indexes: 1,
+                                            indexSize: 36864,
+                                            totalSize: 73728,
+                                            scaleFactor: 1,
+                                            fsUsedSize: 111302815744,
+                                            fsTotalSize: 239433936896,
+                                            ok: 1
+                                            }
+
+*** To check the collections --> db.stats().collections
+*** To check the objects --> db.stats().objects
+*** To delete the collections --> db.stud.drop()  [db.collectionName.drop()]
+                                    db.stud.drop()
+                                    true
+                            And if we want to delete that collection again it will return false.
+                                    db.stud.drop()
+                                    false                            
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Q> Write a MongoDB query to display all the employee details who is working in department number 30 and manager number 7889 .
+
+    db.emp.find({DEPTNO:30,MGR:7889}) // db.emp.find({$and:[{DEPTNO:30,MGR:7889}]})
+
+Q> Write a MongoDB query to display all the employees depertment numbers and manager number who is working in department number 30 and manager number 7698.
+
+    db.emp.find({$and:[{DEPTNO:30,MGR:7698}]},{DEPTNO:1,MGR:1,_id:0})
+
+Q> Write a MongoDB query to display all the employee details who is working as SALESMAN OR who is working under manager 7889.
+
+    db.emp.find({$or:[{JOB:"SALESMAN"},{MGR:7889}]})
+
+Q> Write a MongoDB query to display all the employee details except name is king and job is manager .
+
+    db.emp.find({$nor:[{ENAME:"KING"},{JOB:"MANAGER"}]})
+
+Q> Write a MongoDB query to display all the employee details who's manager number is 7698 or job is clerk or working in depertment no 10.
+
+    db.emp.find({$or:[{MGR:7698},{JOB:"CLERK"},{DEPTNO:10}]})
+
+Q> Write a MongoDB query to display all the employee details who is working as analyst and under department 20.
+
+    db.emp.find({$and:[{JOB:"ANALYST"},{DEPTNO:20}]})
+
+Q> Write a MongoDB query to display all the employee details who is getting salary less than 800 or working under manager 7902.
+
+    db.emp.find({$or:[{SAL:{$lt:800}},{MGR:7902}]})
+
+Q> Write a MongoDB query to display all the employee details who is not getting any commission or who is not working under manager 7788 or depertment no 10
+
+    db.emp.find({$or:[{COMM:{$eq:null}},{MGR:{$ne:7788}},{DEPTNO:{$ne:10}}]})
+
+Q> Write a MongoDB query to display all the employee names who is having address or who is having some commission .
+
+     db.emp.find({$or:[{ADDRESS:{$exists:true}},{COMM:{$ne:null}}]},{ENAME:1,_id:0})
+
+Q> Write a all MongoDB query to display the employee details who is not working under department no 20 or not working in a state karnataka.
+
+    db.emp.find({$nor:[{DEPTNO:20},{"ADDRESS.STATE":"KARNATAKA"}]})
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Q> Write a MongoDB query to get the total number of employees in emp collection .
+
+    db.emp.find().count()
+
+Q> Write a MongoDB query to get the count of employees who is working in DEPTNO 10
+
+    db.emp.find({DEPTNO:10}).count()
+
+Q> Write a MongoDB query to display the count of employees who is working as a manager .
+
+    db.emp.find({JOB:"MANAGER"}).count()
+
+Q> Write a MongoDB query to get the total number of employees who is getting salary greater than 3000 .
+
+    db.emp.find({SAL:{$gt:3000}}).count()
+
+Q> Write a MongoDB query to get the total number of employees staying in BANGALORE city.
+
+    db.emp.find({"ADDRESS.CITY":"BANGALORE"}).count()
+
+Q> Write a MongoDB query to get the total number of employees who's salary is less than 1000.
+
+    db.emp.find({SAL:{$lt:1000}}).count()
+
+Q> Write a MongoDB query to get the total number of employees who is having address and working in department number 10.
+
+
+
+Q> Write a MongoDB query to display first document from the collection .
+
+
+
+Q> Write a MongoDB query to display the first three document from the collection
+
+    db.emp.find({},{_id:0,ENAME:1}).limit(3)
+
+Q> Write a MongoDB query to display the last 4 documents
+
+    db.emp.find({},{_id:0,ENAME:1}).skip(10)
+
+Q> Write a MongoDB query to display the top 6 employees
+
+
+
+Q> Write a MongoDB query to display the top 3 employees who is working as a MANAGER
+
+
+
+Q> Write a MongoDB query to display all the employee details who is getting highest salary
+
+
+
+Q> Write a MongoDB query to display Top 2 employees who are getting highest salary.
+
+
+
+Q> Write a MongoDB query to display Top 2 employees who are getting lowest salary.
+
+
+
+Q> Write a MongoDB query to display all the employee names in aseding order.
+
+    db.emp.find({},{_id:0,ENAME:1}).sort({ENAME:1})
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
+
+Q> Write a MongoDB query to display all the employee names who is getting salary greater than 900 and whos's manager number type is number.
+
+    db.emp.find({SAL:{$gt:900},MGR:{$type:"number"}},{ENAME:1})
+
+Q> Write a MongoDB query to display all the employee names who is getting salary greater than 1200 and whos's manager number is type string.
+
+    db.emp.find({SAL:{$gt:1200},MGR:{$type:"string"}},{ENAME:1})
+
+Q> Write a MongoDB query to get total number of managers.
+
+    db.emp.find({JOB:"MANAGER"}).count()
+
+Q> Write a MongoDB query to display all the employee names and jobs with respect to ascending order of their jobs.
+
+    db.emp.find({},{ENAME:1,_id:0}).sort({JOB:1})
+
+Q> Write a MongoDB query to display all the employee details who is having salary less than 7000 and not having mobile number.
+
+    db.emp.find({SAL:{$lt:7000},MOBILE:{$exists:false}})
+
+Q> Write a MongoDB query to display employee details who is getting fifth highest salary.
+Q> Write a MongoDB query to display employee details who is getting the first lowest salary.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+UPDATE QUERIES :
+
+$set                                             
+$sunset                                                                                                
+$mul
+$inc
+$min
+$max
+$rename
+ARRAY OPERATORS-->
+$push
+$pull
+$pop
+
+
+Q> Write a MongoDB query to add mobile number to the address object of the first document.
+
+    db.emp.updateOne({},{$set:{"ADDRESS.MOBILE":9350887113}})
+
+Q> Write a MongoDB query to add mobile number to the address object of the all the documents.
+
+    db.emp.updateMany({},{$set:{"ADDRESS.MOBILE":9350887113}})
+
+Q> Write a MongoDB query to upadate mobile number 8721661294 to the employee who's name is Miller.
+
+    db.emp.updateOne({ENAME:"MILLER"},{$set:{"ADDRESS.MOBILE":8721661294}})
+
+Q> Write a MongoDB query to upadate salary of the employees to 1000 for those who are working in DEPTNO 20 .
+
+    db.emp.updateMany({DEPTNO:{$eq:20}},{$set:{SAL:1000}})
+
+Q> Write a MongoDB query to upadate mobile of employee 6360505481 who is workig as clerk and not statying in bangalore.
+
+    db.emp.updateMany({JOB:"CLERK","ADDRESS.CITY":{$ne:"BANGALORE"}},{$set:{"ADDRESS.MOBILE":6360505481}})
+
+Q> Write a MongoDB query to update the salary to 800 who is having some commission .
+
+    db.emp.updateMany({COMM:{$ne:null}},{$set:{SAL:800}})
+
+Q> Write a MongoDB query to update the salary with 20% hike for all the employees 
+
+    db.emp.updateMany({},{$mul:{SAL:1.2}})
+
+Q> Write a MongoDB query to update the commission of salesman to zero(0).
+
+    db.emp.updateMany({JOB:"SALESMAN"},{$set:{COMM:0}})
+
+Q> Write a MongoDB query to update the salary of all salesman with minimum of 1500 rupees.
+
+    db.emp.updateMany({JOB:"SALESMAN"},{$min:{SAL:1500}})
+
+Q> Write a MongoDB query to update the commission of all employees who are working in Mumbai with maximum of 560 rupees.
+
+    db.emp.updateMany({"ADDRESS.CITY":"MUMBAI"},{$max:{COMM:560}})
+
+Q> Write a MongoDB query to delete PANNUMBER key of all the employees who is working under department 10 .
+
+    db.emp.updateMany({DEPTNO:10},{$unset:{PANNUMBER:1}})
+
+1. Write a MongoDB query to rename the key DEPTNO to DNO .
+
+    db.emp.updateMany({},{$rename:{DEPTNO:"DNO"}})
+
+2. Write a MongoDB query to update the city of all the employees as Mumbai for those who are woking as analyst and woking in the department 30
+
+    db.emp.updateMany({JOB:{$eq:"ANALYST"},DNO:30},{$set:{"ADDRESS.CITY":"MUMBAI"}})    
+
+3. Write a MongoDB query to update king's emp number as manager number to the employees working as salesman and in depertment number 10.
+
+    
+
+4. Write a MongoDB query to update the salary and commission into twice for the employees working as president.
+
+    db.emp.updateMany({JOB:"PRESIDENT"},{$mul:{SAL:2,COMM:2}})
+
+5. Write a MongoDB query to update the minimum salary to 1000 and maximum commission to 200 for all the clerks.
+
+    db.emp.updateMany({JOB:"CLERK"},{$min:{SAL:1000}},{$max:{COMM:200}})
+
+6. Write a MongoDB query to add 300 rupees to all the employees .
+
+    db.emp.updateMany({},{$inc:{SAL:300}});
+
+====================================================================================================================================================================================
+
+1> Write a MongoDB query to replace the document of the employees who is working as clerk with the document name = CLARK , salary = 1000 , commission = 5000.
+
+    db.emp.replaceOne({JOB:"CLERK"},{NAME:"CLARK",SAL:10000,COMM:5000})
+
+2> Write a MongoDB query to delete the first documet from the collections.
+
+    db.stud.deleteOne({})
+
+3> Write a MongoDB query to update the department number as 40 and job as postman for all the salesmans.
+
+    db.emp.updateMany({JOB:"SALESMAN"},{$set:{DNO:40,JOB:"POSTMAN"}})
+
+4> Write a MongoDB query to replace the document whose name is allen to the document which is having name =dinga, salary =50000.
+
+    db.emp.updateMany({ENAME:"ALLEN"},{$set:{ENAME:"DINGA",SAL:50000}})
+    db.emp.replaceOne({ENAME:"ALLEN"},{ENAME:"DINGA",SAL:50000})
+
+5> Write a MongoDB query to replace the address with department details .(Update query)
+
+
+
+6> Write a MongoDB query to change the keyname from address to location.
+
+    db.emp.updateMany({},{$rename:{ADDRESS:"LOCATION"}})
+
+7> Write a MongoDB query to delete the employees who is working as SALESMAN.
+
+    db.emp.deleteMany({JOB:"SALESMAN"})
+
+8> Write a MongoDB query to delete first occurred clerk.
+
+    db.emp.deleteOne({JOB:"CLERK"})
+
+9> Write a MongoDB query to delete all the managers from the collection.
+
+    db.emp.deleteMany({JOB:"MANAGER"})
+
+10> Write a MongoDB query to delete all the employee names who are working in department 10 .
+
+    db.emp.updateMany({$unset:"ENAME"},{DNO:10})
+
+11> Write a MongoDB query to update all the employee cities to bangalore who is working in department 20 and getting salary 1200 or 1800.
+
+    db.emp.updateMany({$set:{"ADDRESS.CITY":"BANGALORE"}},{DNO:20,SAL:{$in:[1200,1800]}})
+
+12> Write a MongoDB query to delete all details pf the employee who is having salaey 1250 and job is salesman or analyst and workig in department number 20.
+
+
+
+13> Write a MongoDB query to delete all employee from the employees collection.
+
+    db.emp.deleteMany()
+
+14> Write a MongoDB query to delete all employee's commision wwho is workig as salesman.
+
+    db.emp.updateMany({$unset:"COMM"},{JOB:"SALESMAN"})
+
+15> Write a MongoDB query to delete the job and department number of the employees those who are workig in department number 30 or mgr number 7698.
+
+    
+
+16> Write a MongoDB query to display top 6 records.
+
+    db.emp.find().limit(6)
+
+17> Write a MongoDB query to skip top 3 records.
+
+    db.emp.find().skip(3)
+
+18> Write a MongoDB query to display top 3 records after skipping 6 records.
+
+    db.emp.find().limit(3).skip(6)
+
+19> Write a MongoDB query to display 6th and 7th document.
+
+    db.emp.find().skip(5).limit(2)
